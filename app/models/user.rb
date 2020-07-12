@@ -9,4 +9,13 @@ class User < ApplicationRecord
 
   has_secure_password
   # 新しいレコードが出来る時のみ適用される（UPDATEでは、検証されない）
+
+  def User.digest(string)
+    cost = ActiveModel::SecurePassword.min_cost ? BCrypt::Engine::MIN_COST :
+               BCrypt::Engine.cost
+    BCrypt::Password.create(string, cost: cost)
+  end
+
+
+
 end
