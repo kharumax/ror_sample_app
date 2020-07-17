@@ -7,8 +7,13 @@ class User < ApplicationRecord
   validates :email,presence: true,length: {maximum: 255},
             format: {with: VALID_EMAIL_REGEX},uniqueness: true
   validates :password,presence: true,length: {minimum: 6},allow_nil: true
+  has_many :microposts,dependent: :destroy
 
   has_secure_password # 新しいレコードが出来る時のみ適用される（UPDATEでは、検証されない）
+
+  def feed
+    Micropost.where("user_id = ?",id)
+  end
 
   def downcase_email
     self.email = email.downcase
